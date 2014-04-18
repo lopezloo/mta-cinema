@@ -104,7 +104,9 @@ function nextVideo(room) -- (shape)
 
 		setElementData(room, "video", { roomQuery[room][1][1], roomQuery[room][1][2] }) -- vidType, vid
 		setElementData(room, "seconds", 0)
-		roomUpdateTimer[room] = setTimer(updateRoomTime, 1000, tonumber(roomQuery[room][1][4]), room)
+		if type(roomQuery[room][1][4]) == "number" and roomQuery[room][1][4] > 0 then
+			roomUpdateTimer[room] = setTimer(updateRoomTime, 1000, roomQuery[room][1][4], room)
+		end
 
 		--for k, v in pairs(players) do setElementData(v, "votedToSkip", false) end
 	else

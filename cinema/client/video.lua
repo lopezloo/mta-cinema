@@ -7,7 +7,7 @@ local video = {
 	fullscreen
 }
 
-requestBrowserPages( { "youtube.com", "vimeo.com", "twitch.tv", "redknife.net" } )
+requestBrowserPages( { "youtube.com", "vimeo.com", "player.vimeo.com", "twitch.tv", "redknife.net" } )
 
 local screenTextures = {
 	[7901] = "bobobillboard1",
@@ -42,6 +42,7 @@ function playVideo(room, seconds)
 			end
 		elseif vid[1] == "twitch" then
 			url = "http://twitch.tv/" .. vid[2] .. "/popout"
+			--url = "http://twitch.tv/" .. vid[2] .. "/hls"
 		end
 	else
 		outputChatBox("no video in this room bro")

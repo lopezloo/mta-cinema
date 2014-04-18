@@ -1,0 +1,21 @@
+<meta>
+	<info name="cinema" author="lopezloo" type="gamemode" description="Cinema gamemode" edf:definition="edf.xml" />
+	
+	<script src="utils.lua" type="shared" />
+
+	<script src="server/main.lua" />
+	<script src="server/youtube.lua" />
+	<script src="server/room.lua" />
+
+	<script src="client/video.lua" type="client" />
+	<script src="client/request.lua" type="client" />
+	<script src="client/room.lua" type="client" />
+	<script src="client/main.lua" type="client" />
+
+	<file src="replaceTexture.fx" />
+	<file src="html/novideo.html" />
+
+	<export function="createRoom" type="server" />
+	<include resource="animsync" />
+	<include resource="cinema-names" />
+</meta>

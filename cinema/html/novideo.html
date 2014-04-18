@@ -1,0 +1,43 @@
+<html>
+	<head>
+		<style>
+			body {
+				background: radial-gradient(silver, gray);
+				background: -webkit-radial-gradient(silver, gray);
+			}
+
+			span {
+				font-family: Tahoma;
+				font-size: 97px;
+				position: absolute;
+				top: 60%;
+				left: 35%;
+				color: black;
+				text-shadow: 2px 2px black;
+
+				-webkit-animation: rotate 1s linear infinite alternate;
+			}
+
+			@-webkit-keyframes rotate {
+				0% {
+					-webkit-transform: scale(0.5);
+				}
+
+				100% {
+					-webkit-transform: scale(1);
+				}
+			}
+
+			img {
+				position: absolute;
+				top: 35%;
+				left: 24%;
+			}
+		</style>
+	</head>
+
+	<body>
+		<img src="http://redknife.net/mta/cinema/logo.png" />
+		<span>NO VIDEO</span>
+	</body>
+</html>

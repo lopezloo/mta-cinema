@@ -1,0 +1,9 @@
+<def name="cinema">
+    <element name="spawnpoint" friendlyname="Super spawn kurwo">
+        <data name="position" type="coord3d" default="0,0,0" />
+        <data name="rotation" type="coord3d" default="0,0,0" />
+
+        <ped model="7" rotation="!rotation!" />
+        <blip color="#FF0000" />
+    </element>
+</def>

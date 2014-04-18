@@ -70,7 +70,7 @@ function onGUIClick(button, state)
 	if button == "left" then
 		if source == request.buttons[1] then
 			outputChatBox("Requesting video with url: wat?")
-			triggerServerEvent("requestVideo", root, "xMVTKOoy1uk")
+			triggerServerEvent("requestVideo", root, "yt", "xMVTKOoy1uk")
 		elseif source == request.buttons[2] or source == request.rbuttons[1] then
 			if not searchingVideo then
 				addEventHandler("onClientRender", root, renderRequestBrowser)	

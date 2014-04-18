@@ -16,12 +16,12 @@ CINEMA GAMEMODE (like GMod)
 	* room chat [100%]
 	* nametags [100%]
 	* hidding other players by key
-	* sitting [100%]
-		* animsync [100%]
 
 	* fullscreen mode [100%]
 	* fuckup vevo [100%]
 	
 	* multiple screens per room [100%]
+	* TWITCH support [100%]
 
-	* TWITCH support
+	* animsync [100%]
+	* sitting on hairs etc.

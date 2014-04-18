@@ -7,7 +7,7 @@ local video = {
 	fullscreen
 }
 
-requestBrowserPages( { "youtube.com", "twitch.tv", "redknife.net" } )
+requestBrowserPages( { "youtube.com", "vimeo.com", "twitch.tv", "redknife.net" } )
 
 local screenTextures = {
 	[7901] = "bobobillboard1",
@@ -25,21 +25,20 @@ function playVideo(room, seconds)
 		outputChatBox("ERROR: Room doesn't have assigned any screen.")
 		return
 	end
-	
-	--[[local texture = screenTextures[getElementModel(object)]
-	if not texture then
-		outputChatBox("ERROR: I can't play video because object ID " .. getElementModel(object) .. " don't have assigned main (screen) texture. See client/video.lua and add them!")
-		return
-	end]]--
 
 	local url
 	if vid then
 		if vid[1] == "yt" then
-			--url = "http://youtube.com/embed/" .. vid .. "?rel=0&html5=1&autoplay=1" -- &start=77
 			url = "http://youtube.com/tv/#/watch?v=" .. vid[2] .. "&mode=transport"
 			if seconds then
-				outputChatBox("Passed seconds: " .. seconds + 5)
+				outputChatBox("Passed seconds: " .. seconds)
 				url = url .. "&t=" .. seconds .. "s" -- &t=120s (tv and normal link)
+			end
+		elseif vid[1] == "vimeo" then
+			url = "http://player.vimeo.com/video/" .. vid[2] .. "?autoplay=1"
+			if seconds then
+				outputChatBox("Passed seconds: " .. seconds)
+				url = url .. "&#t=0m" .. seconds .. "s"
 			end
 		elseif vid[1] == "twitch" then
 			url = "http://twitch.tv/" .. vid[2] .. "/popout"

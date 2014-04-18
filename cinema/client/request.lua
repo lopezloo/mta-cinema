@@ -40,7 +40,7 @@ loadBrowserURL(request.browser, "http://youtube.com")
 
 addCommandHandler("req",
 	function(cmd, theType, vid)
-		if (theType == "yt" or theType == "twitch") and vid and getElementData(localPlayer, "colshape") then
+		if (theType == "yt" or theType == "vimeo" or theType == "twitch") and vid and getElementData(localPlayer, "colshape") then
 			outputChatBox("Requesting " .. theType .. " video with url: " .. vid)
 			triggerServerEvent("requestVideo", root, theType, vid)
 		end

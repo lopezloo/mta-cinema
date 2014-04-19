@@ -3,7 +3,7 @@ sX, sY = guiGetScreenSize()
 local video = {
 	shader = dxCreateShader("replaceTexture.fx"),
 	target = dxCreateRenderTarget(sX, sY),
-	browser = createBrowser(sX, sY),
+	browser,
 	fullscreen
 }
 

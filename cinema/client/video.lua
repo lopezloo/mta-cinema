@@ -101,14 +101,14 @@ end
 
 function toggleFullscreen()
 	if isElement(video.browser) then
-		if not fullscreen then
+		if not video.fullscreen then
 			removeEventHandler("onClientRender", root, renderVideo)
 			addEventHandler("onClientRender", root, renderVideoOnFullscreen)
 		else
 			removeEventHandler("onClientRender", root, renderVideoOnFullscreen)
 			addEventHandler("onClientRender", root, renderVideo)
 		end
-		fullscreen = not fullscreen
+		video.fullscreen = not video.fullscreen
 	end
 end
 

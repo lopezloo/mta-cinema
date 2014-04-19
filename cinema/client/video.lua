@@ -17,6 +17,10 @@ local screenTextures = {
 	[2700] = "cj_tv_screen"
 }
 
+if not video.target or not video.shader then
+	outputChatBox("CRITICAL ERROR: #F2F2F2Can't create render target or shader. You will not able to see videos properly. (Free memory for MTA: " .. dxGetStatus().VideoMemoryFreeForMTA .. " MB)", 255, 0, 0, true)
+end
+
 function playVideo(room, seconds)
 	local vid = getElementData(room, "video")
 

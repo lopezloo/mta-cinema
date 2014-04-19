@@ -38,7 +38,7 @@ guiSetEnabled(request.rbuttons[5], false)
 
 loadBrowserURL(request.browser, "http://youtube.com")
 
-addCommandHandler("req",
+addCommandHandler("req", -- debug cmd
 	function(cmd, theType, vid)
 		if (theType == "yt" or theType == "vimeo" or theType == "twitch") and vid and getElementData(localPlayer, "colshape") then
 			outputChatBox("Requesting " .. theType .. " video with url: " .. vid)
@@ -56,49 +56,51 @@ end
 function onCursorMove(relativeX, relativeY, absoluteX, absoluteY)
 	injectBrowserMouseMove(request.browser, absoluteX - request.pX, absoluteY - request.pY)
 end
- 
-local btns = {left = 0, middle = 1, right = 2}
+
 function onClick(button, state)
-	if state == "down" then
-		injectBrowserMouseDown(request.browser, btns[button])
-	else
-		injectBrowserMouseUp(request.browser, btns[button])
-	end
-end
-
-function onGUIClick(button, state)
 	if button == "left" then
-		if source == request.buttons[1] then
-			outputChatBox("Requesting video with url: wat?")
-			triggerServerEvent("requestVideo", root, "yt", "xMVTKOoy1uk")
-		elseif source == request.buttons[2] or source == request.rbuttons[1] then
-			if not searchingVideo then
-				addEventHandler("onClientRender", root, renderRequestBrowser)	
-				addEventHandler("onClientCursorMove", root, onCursorMove)
-				addEventHandler("onClientClick", root, onClick)
-
-				showCursor(true)
-				guiSetVisible(request.buttons[1], true)
-				guiSetVisible(request.buttons[2], true)
-			else
-				if not guiGetVisible(request.window) then
-					showCursor(false)
-				end
-				guiSetVisible(request.buttons[1], false)
-				guiSetVisible(request.buttons[2], false)
-				removeEventHandler("onClientRender", root, renderRequestBrowser)
-				removeEventHandler("onClientCursorMove", root, onCursorMove)
-				removeEventHandler("onClientClick", root, onClick)
-			end
-			searchingVideo = not searchingVideo
-		elseif source == request.rbuttons[2] then
-			toggleFullscreen()
-		elseif source == request.rbuttons[3] and getElementData(source, "votedToSkip") == false then
-			triggerServerEvent("voteSkip", root, 1)
+		if state == "down" then
+			injectBrowserMouseDown(request.browser, 0)
+		else
+			injectBrowserMouseUp(request.browser, 0)
 		end
 	end
 end
-addEventHandler("onClientGUIClick", root, onGUIClick)
+
+addEventHandler("onClientGUIClick", root,
+	function(button)
+		if button == "left" then
+			if source == request.buttons[1] then
+				outputChatBox("Requesting video with url: wat?")
+				triggerServerEvent("requestVideo", root, "yt", "xMVTKOoy1uk")
+			elseif source == request.buttons[2] or source == request.rbuttons[1] then
+				if not searchingVideo then
+					addEventHandler("onClientRender", root, renderRequestBrowser)	
+					addEventHandler("onClientCursorMove", root, onCursorMove)
+					addEventHandler("onClientClick", root, onClick)
+
+					showCursor(true)
+					guiSetVisible(request.buttons[1], true)
+					guiSetVisible(request.buttons[2], true)
+				else
+					if not guiGetVisible(request.window) then
+						showCursor(false)
+					end
+					guiSetVisible(request.buttons[1], false)
+					guiSetVisible(request.buttons[2], false)
+					removeEventHandler("onClientRender", root, renderRequestBrowser)
+					removeEventHandler("onClientCursorMove", root, onCursorMove)
+					removeEventHandler("onClientClick", root, onClick)
+				end
+				searchingVideo = not searchingVideo
+			elseif source == request.rbuttons[2] then
+				toggleFullscreen()
+			elseif source == request.rbuttons[3] and getElementData(source, "votedToSkip") == false then
+				triggerServerEvent("voteSkip", root, 1)
+			end
+		end
+	end
+)
 
 addCommandHandler("menu",
 	function()

@@ -1,5 +1,23 @@
 currentRoomQuery = {}
 
+local function secondsToTime(seconds)
+	if type(seconds) == "number" then
+		local minutes = math.floor(seconds/60)
+		if minutes < 10 then
+			minutes = "0" .. minutes
+		end
+
+		local scs = math.fmod(seconds, 60)
+		if scs < 10 then
+			scs = "0" .. scs
+		end
+
+		return minutes .. ":" .. scs
+	else
+		return seconds
+	end
+end
+
 addEvent("updateQuery", true)
 addEventHandler("updateQuery", root,
 	function(vid, title, seconds)
@@ -35,21 +53,3 @@ addEventHandler("getFullQuery", root,
 		end
 	end
 )
-
-function secondsToTime(seconds)
-	if type(seconds) == "number" then
-		local minutes = math.floor(seconds/60)
-		if minutes < 10 then
-			minutes = "0" .. minutes
-		end
-
-		local scs = math.fmod(seconds, 60)
-		if scs < 10 then
-			scs = "0" .. scs
-		end
-
-		return minutes .. ":" .. scs
-	else
-		return seconds
-	end
-end

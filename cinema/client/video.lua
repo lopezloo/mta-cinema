@@ -108,8 +108,10 @@ function toggleFullscreen()
 	end
 end
 
-bindKey("O", "down", -- showing yt controls etc.
+bindKey("O", "down", -- show controls, not always work with vimeo (?)
 	function()
-		injectBrowserMouseMove(video.browser, 0, 0)
+		if isElement(video.browser) then
+			injectBrowserMouseMove(video.browser, 0, 0)
+		end
 	end
 )

@@ -102,24 +102,3 @@ bindKey("l", "down",
 		end
 	end
 )
-
--- DEBUG
-addEventHandler("onClientRender", root,
-	function()
-		for k, v in pairs(getElementsByType("colshape")) do
-			--dxDrawText("col: " .. tostring(isElementWithinColShape(localPlayer, v)), 100, sY-25)
-			break
-		end
-	end
-)
-
-addCommandHandler("pos", -- col pos grabber
-	function()
-		local x, y, z = getElementPosition(localPlayer)
-		local int = getElementInterior(localPlayer)
-		outputChatBox("POS: " .. x .. ", " .. y .. ", " .. z .. " int: " .. int)
-		setClipboard(x .. ", " .. y .. ", " .. z .. " (int " .. int .. ")")
-	end
-)
-
-setDevelopmentMode(true)

@@ -1,14 +1,41 @@
 local startPos
+local currentAnim = 1
 
 bindKey("h", "down",
 	function()
 		if getElementData(localPlayer, "anim") ~= false then
 			if startPos ~= nil then
+				toggleAllControls(true, true, false)
 				removeEventHandler("onClientPreRender", root, updatePosition)
+				startPos = nil
 			end
 			setElementData(localPlayer, "anim", false)
 		else
-			setElementData(localPlayer, "anim", {"CAR", "Sit_relaxed"})
+			setElementData(localPlayer, "anim", anims[currentAnim])
+		end
+	end
+)
+
+bindKey("mouse1", "down",
+	function()
+		if not startPos and getElementData(localPlayer, "anim") ~= false then
+			currentAnim = currentAnim + 1
+			if currentAnim > #anims then
+				currentAnim = 1
+			end
+			setElementData(localPlayer, "anim", anims[currentAnim])
+		end
+	end
+)
+
+bindKey("mouse2", "down",
+	function()
+		if not startPos and getElementData(localPlayer, "anim") ~= false then
+			currentAnim = currentAnim - 1
+			if currentAnim == 0 then
+				currentAnim = #anims
+			end
+			setElementData(localPlayer, "anim", anims[currentAnim])
 		end
 	end
 )
@@ -19,18 +46,18 @@ bindKey("j", "down",
 			if getElementData(localPlayer, "anim") ~= false then
 				startPos = {}
 				startPos[1], startPos[2], startPos[3] = getElementPosition(localPlayer)
+				toggleAllControls(false, true, false)
 				addEventHandler("onClientPreRender", root, updatePosition)
 			else
 				return
 			end
 		else
+			toggleAllControls(true, true, false)
 			removeEventHandler("onClientPreRender", root, updatePosition)
 			startPos = nil
 		end
 	end
 )
-
-bindKey("mouse_wheel_up", "down", function() outputChatBox("chuj") end)
 
 function updatePosition()
 	local x, y, z = 0, 0, 0
@@ -39,7 +66,7 @@ function updatePosition()
 	end
 
 	if getKeyState("s") then
-			y = y - 0.05
+		y = y - 0.05
 	end
 
 	for k, v in pairs(getBoundKeys("left")) do

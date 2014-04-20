@@ -1,4 +1,5 @@
 local startPos
+positioning = false
 
 bindKey("h", "down",
 	function()
@@ -10,6 +11,8 @@ bindKey("h", "down",
 			end
 			setElementData(localPlayer, "anim", false)
 		else
+			startPos = {}
+			startPos[1], startPos[2], startPos[3] = getElementPosition(localPlayer)			
 			setElementData(localPlayer, "anim", anims[currentAnim])
 		end
 	end
@@ -17,10 +20,8 @@ bindKey("h", "down",
 
 bindKey("j", "down",
 	function()
-		if not startPos then
+		if not positioning then
 			if getElementData(localPlayer, "anim") ~= false then
-				startPos = {}
-				startPos[1], startPos[2], startPos[3] = getElementPosition(localPlayer)
 				toggleAllControls(false, true, false)
 				addEventHandler("onClientPreRender", root, updatePosition)
 			else
@@ -29,8 +30,8 @@ bindKey("j", "down",
 		else
 			toggleAllControls(true, true, false)
 			removeEventHandler("onClientPreRender", root, updatePosition)
-			startPos = nil
 		end
+		positioning = not positioning
 	end
 )
 

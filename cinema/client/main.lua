@@ -92,3 +92,17 @@ bindKey("l", "down",
 		end
 	end
 )
+
+addEventHandler("onClientWebsiteRequestResult", root,
+	function(allowed)
+		if not allowed then
+			outputChatBox("ERROR: #F2F2F2Allow to view this sites is required for watching videos. Say #83D68C/permissions #F2F2F2 to re-open permissions box.", 255, 0, 0, true)
+		end
+	end
+)
+
+addCommandHandler("permissions",
+	function()
+		requestBrowserPages(requiredSites)
+	end
+)

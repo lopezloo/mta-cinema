@@ -7,7 +7,8 @@ local video = {
 	fullscreen
 }
 
-requestBrowserPages( { "youtube.com", "vimeo.com", "player.vimeo.com", "twitch.tv", "redknife.net" } )
+requiredSites = { "youtube.com", "vimeo.com", "player.vimeo.com", "twitch.tv", "redknife.net" }
+requestBrowserPages(requiredSites)
 
 local screenTextures = {
 	[7901] = "bobobillboard1",

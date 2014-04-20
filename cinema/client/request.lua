@@ -1,3 +1,4 @@
+guiSetInputMode("no_binds_when_editing")
 request = {
 	pX = (sX-1024)/2, pY = (sY-768)/2,
 
@@ -36,7 +37,7 @@ guiSetVisible(request.window, false)
 guiSetEnabled(request.rbuttons[4], false)
 guiSetEnabled(request.rbuttons[5], false)
 
-loadBrowserURL(request.browser, "http://youtube.com")
+loadBrowserURL(request.browser, "http://redknife.net/mta/cinema/request.html")
 
 addCommandHandler("req", -- debug cmd
 	function(cmd, theType, vid)
@@ -67,21 +68,53 @@ function onClick(button, state)
 	end
 end
 
+function onCharacter(character)
+	outputChatBox("onCharacter = " .. tostring(character))
+	injectBrowserCharacter(request.browser, character)
+end
+
+function onKey(button, pressed)	
+	if pressed then
+		injectBrowserKeyDown(request.browser, button)
+	else
+		injectBrowserKeyUp(request.browser, button)
+	end
+end
+
+function onScroll(key, state)
+	if key == "mouse_wheel_up" then
+		setBrowserScrollPosition(request.browser, getBrowserScrollPosition(request.browser) + 1)
+	else
+		setBrowserScrollPosition(request.browser, getBrowserScrollPosition(request.browser) - 1)
+	end
+end
+
 addEventHandler("onClientGUIClick", root,
 	function(button)
 		if button == "left" then
 			if source == request.buttons[1] then
-				outputChatBox("Requesting video with url: wat?")
-				triggerServerEvent("requestVideo", root, "yt", "xMVTKOoy1uk")
+				-- todo: twitch, vimeo support
+				local url = getBrowserURL(request.browser)
+				local a = string.find(url, "watch?")
+				if not a then return end
+				url = string.sub(url, a + string.len("watch?v") + 1)
+				outputChatBox("Requesting video with url: " .. url)
+				triggerServerEvent("requestVideo", root, "yt", url)
 			elseif source == request.buttons[2] or source == request.rbuttons[1] then
 				if not searchingVideo then
 					addEventHandler("onClientRender", root, renderRequestBrowser)	
 					addEventHandler("onClientCursorMove", root, onCursorMove)
 					addEventHandler("onClientClick", root, onClick)
+					addEventHandler("onClientCharacter", root, onCharacter)
+					addEventHandler("onClientKey", root, onKey)
+
+					bindKey("mouse_wheel_up", "down", onScroll)
+					bindKey("mouse_wheel_down", "down", onScroll)
 
 					showCursor(true)
 					guiSetVisible(request.buttons[1], true)
 					guiSetVisible(request.buttons[2], true)
+					toggleAllControls(false, false, true)
 				else
 					if not guiGetVisible(request.window) then
 						showCursor(false)
@@ -91,6 +124,14 @@ addEventHandler("onClientGUIClick", root,
 					removeEventHandler("onClientRender", root, renderRequestBrowser)
 					removeEventHandler("onClientCursorMove", root, onCursorMove)
 					removeEventHandler("onClientClick", root, onClick)
+					removeEventHandler("onClientCharacter", root, onCharacter)
+					removeEventHandler("onClientKey", root, onKey)
+					
+					unbindKey("mouse_wheel_up", "down", onScroll)
+					unbindKey("mouse_wheel_down", "down", onScroll)
+
+					loadBrowserURL(request.browser, "http://redknife.net/mta/cinema/request.html")
+					toggleAllControls(true, false, true)
 				end
 				searchingVideo = not searchingVideo
 			elseif source == request.rbuttons[2] then
@@ -101,6 +142,8 @@ addEventHandler("onClientGUIClick", root,
 		end
 	end
 )
+
+-- TODO: play yt videos in HTML5 mode in request browser
 
 addCommandHandler("menu",
 	function()

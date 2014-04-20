@@ -13,7 +13,7 @@ anims = {
 
 bindKey("mouse1", "down",
 	function()
-		if not startPos and getElementData(localPlayer, "anim") ~= false then
+		if not isCursorShowing() and not positioning and getElementData(localPlayer, "anim") ~= false then
 			currentAnim = currentAnim + 1
 			if currentAnim > #anims then
 				currentAnim = 1
@@ -25,7 +25,7 @@ bindKey("mouse1", "down",
 
 bindKey("mouse2", "down",
 	function()
-		if not startPos and getElementData(localPlayer, "anim") ~= false then
+		if not isCursorShowing() and not positioning and getElementData(localPlayer, "anim") ~= false then
 			currentAnim = currentAnim - 1
 			if currentAnim == 0 then
 				currentAnim = #anims

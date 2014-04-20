@@ -1,5 +1,4 @@
 local startPos
-local currentAnim = 1
 
 bindKey("h", "down",
 	function()
@@ -11,30 +10,6 @@ bindKey("h", "down",
 			end
 			setElementData(localPlayer, "anim", false)
 		else
-			setElementData(localPlayer, "anim", anims[currentAnim])
-		end
-	end
-)
-
-bindKey("mouse1", "down",
-	function()
-		if not startPos and getElementData(localPlayer, "anim") ~= false then
-			currentAnim = currentAnim + 1
-			if currentAnim > #anims then
-				currentAnim = 1
-			end
-			setElementData(localPlayer, "anim", anims[currentAnim])
-		end
-	end
-)
-
-bindKey("mouse2", "down",
-	function()
-		if not startPos and getElementData(localPlayer, "anim") ~= false then
-			currentAnim = currentAnim - 1
-			if currentAnim == 0 then
-				currentAnim = #anims
-			end
 			setElementData(localPlayer, "anim", anims[currentAnim])
 		end
 	end

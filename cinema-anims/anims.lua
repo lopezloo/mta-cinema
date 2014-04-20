@@ -1,3 +1,4 @@
+currentAnim = 1
 anims = {
 	{"CAR", "Sit_relaxed"},
 	{"LOWRIDER", "Tap_hand"},
@@ -9,3 +10,27 @@ anims = {
 	{"SUNBATHE", "ParkSit_M_IdleC"},
 	{"SUNBATHE", "ParkSit_W_idleA"}
 }
+
+bindKey("mouse1", "down",
+	function()
+		if not startPos and getElementData(localPlayer, "anim") ~= false then
+			currentAnim = currentAnim + 1
+			if currentAnim > #anims then
+				currentAnim = 1
+			end
+			setElementData(localPlayer, "anim", anims[currentAnim])
+		end
+	end
+)
+
+bindKey("mouse2", "down",
+	function()
+		if not startPos and getElementData(localPlayer, "anim") ~= false then
+			currentAnim = currentAnim - 1
+			if currentAnim == 0 then
+				currentAnim = #anims
+			end
+			setElementData(localPlayer, "anim", anims[currentAnim])
+		end
+	end
+)

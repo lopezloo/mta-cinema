@@ -1,0 +1,4 @@
+<meta>
+	<info author="lopezloo" description="Animations with able to positioning and fully synced" />
+	<script src="client.lua" type="client" />
+</meta>

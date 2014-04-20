@@ -83,16 +83,6 @@ addEventHandler("onClientElementDataChange", root,
 	end
 )
 
-bindKey("h", "down",
-	function()
-		if getElementData(localPlayer, "anim") ~= false then
-			exports["animsync"]:resetPedSyncedAnimation(localPlayer)
-		else
-			exports["animsync"]:setPedSyncedAnimation(localPlayer, "CAR", "Sit_relaxed")
-		end
-	end
-)
-
 bindKey("l", "down", 
 	function()
 		if getElementAlpha(localPlayer) == 255 then

@@ -16,6 +16,6 @@
 	<!-- <file src="html/novideo.html" /> -->
 
 	<export function="createRoom" type="server" />
-	<include resource="animsync" />
+	<include resource="cinema-anims" />
 	<!-- <include resource="cinema-names" /> -->
 </meta>

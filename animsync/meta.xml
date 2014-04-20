@@ -1,7 +1,0 @@
-<meta>
-	<info author="lopezloo" description="Synced animations" />
-	<script src="client.lua" type="client" />
-
-	<export function="setPedSyncedAnimation" type="client" />
-	<export function="resetPedSyncedAnimation" type="client" />
-</meta>

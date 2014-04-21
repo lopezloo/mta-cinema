@@ -10,9 +10,11 @@ bindKey("h", "down",
 				startPos = nil
 			end
 			setElementData(localPlayer, "anim", false)
+			local rx, ry, rz = getElementRotation(localPlayer)
+			setElementRotation(localPlayer, rx, ry, rz) -- rotation fix o_o
 		else
 			startPos = {}
-			startPos[1], startPos[2], startPos[3] = getElementPosition(localPlayer)			
+			startPos[1], startPos[2], startPos[3] = getElementPosition(localPlayer)	
 			setElementData(localPlayer, "anim", anims[currentAnim])
 		end
 	end
@@ -24,52 +26,67 @@ bindKey("j", "down",
 			if getElementData(localPlayer, "anim") ~= false then
 				toggleAllControls(false, true, false)
 				addEventHandler("onClientPreRender", root, updatePosition)
+				bindKey("mouse_wheel_up", "down", rotate)
+				bindKey("mouse_wheel_down", "down", rotate)
 			else
 				return
 			end
 		else
 			toggleAllControls(true, true, false)
 			removeEventHandler("onClientPreRender", root, updatePosition)
+			unbindKey("mouse_wheel_up", "down", rotate)
+			unbindKey("mouse_wheel_down", "down", rotate)
 		end
 		positioning = not positioning
 	end
 )
 
+function rotate(key)
+	local rx, ry, rz = getElementRotation(localPlayer)
+	if key == "mouse_wheel_up" then
+		rz = rz + 4
+		if getKeyState("lshift") then
+			rz = rz + 4
+		end
+	else
+		rz = rz - 4
+		if getKeyState("lshift") then
+			rz = rz - 4
+		end		
+	end
+	setElementRotation(localPlayer, rx, ry, -rz) -- rot fix
+end
+
 function updatePosition()
 	local x, y, z = 0, 0, 0
-	if getKeyState("w") then
-		y = y + 0.05
-	end
+	if not isConsoleActive() then
+		if getKeyState("w") then
+			y = y + 0.05
+		end
 
-	if getKeyState("s") then
-		y = y - 0.05
-	end
+		if getKeyState("s") then
+			y = y - 0.05
+		end
 
-	for k, v in pairs(getBoundKeys("left")) do
-		if getKeyState(k) then
-			x = x - 0.05
+		for k, v in pairs(getBoundKeys("left")) do
+			if getKeyState(k) then
+				x = x - 0.05
+			end
+		end
+
+		for k, v in pairs(getBoundKeys("right")) do
+			if getKeyState(k) then
+				x = x + 0.05
+			end
+		end
+
+		if getKeyState("arrow_u") then
+			z = z + 0.05
+		end
+		if getKeyState("arrow_d") then
+			z = z - 0.05
 		end
 	end
-
-	for k, v in pairs(getBoundKeys("right")) do
-		if getKeyState(k) then
-			x = x + 0.05
-		end
-	end
-
-	--[[if getKeyState("mouse_wheel_up") then -- doesn't work omg
-		z = z + 0.1
-	end
-	if getKeyState("mouse_wheel_down") then
-		z = z - 0.1
-	end]]--
-
-	if getKeyState("arrow_u") then
-		z = z + 0.05
-	end
-	if getKeyState("arrow_d") then
-		z = z - 0.05
-	end	
 
 	dxDrawLine3D(startPos[1], startPos[2], startPos[3], startPos[1] + 0.05, startPos[2] + 0.05, startPos[3] + 0.05, tocolor(255, 0, 0, 200), 10)
 	x, y, z = getPositionFromElementOffset(localPlayer, x, y, z)

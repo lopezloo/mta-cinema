@@ -70,7 +70,6 @@ end
 function stopVideo(room)
 	if isElement(video.browser) then
 		outputChatBox("stopVideo")
-
 		if not room then room = getElementData(localPlayer, "colshape") end
 		if isElement(room) then
 			local screens = getElementData(room, "screens")
@@ -79,8 +78,14 @@ function stopVideo(room)
 					engineRemoveShaderFromWorldTexture(video.shader, screenTextures[getElementModel(v)], v)
 				end
 			end
+
+			if video.fullscreen then
+				removeEventHandler("onClientRender", root, renderVideoOnFullscreen)
+				video.fullscreen = false
+			end
+			removeEventHandler("onClientRender", root, updateVideoBrowser)
 			destroyElement(video.browser)
-		end
+		end		
 	end
 end
 

@@ -82,24 +82,35 @@ function onKey(button, pressed)
 end
 
 function onScroll(key, state)
-	if key == "mouse_wheel_up" then
+	--[[if key == "mouse_wheel_up" then
 		setBrowserScrollPosition(request.browser, getBrowserScrollPosition(request.browser) + 1)
 	else
 		setBrowserScrollPosition(request.browser, getBrowserScrollPosition(request.browser) - 1)
-	end
+	end]]--
 end
+
+local videoGetString = {
+	-- mode, url, missing letters
+	{"yt", "youtube.com/watch?", 2},
+	{"vimeo", "vimeo.com/"},
+	{"twitch", "twitch.tv/"}
+}
 
 addEventHandler("onClientGUIClick", root,
 	function(button)
 		if button == "left" then
 			if source == request.buttons[1] then
-				-- todo: twitch, vimeo support
 				local url = getBrowserURL(request.browser)
-				local a = string.find(url, "watch?")
-				if not a then return end
-				url = string.sub(url, a + string.len("watch?v") + 1)
-				outputChatBox("Requesting video with url: " .. url)
-				triggerServerEvent("requestVideo", root, "yt", url)
+				for k, v in pairs(videoGetString) do
+					local a = string.find(url, v[2])
+					if a then
+						if v[3] then a = a + v[3] end
+						url = string.sub(url, a + string.len(v[2]))
+						outputChatBox("Requesting video (" .. v[1] .. ") with url: " .. url)
+						triggerServerEvent("requestVideo", root, v[1], url)
+						break
+					end
+				end
 			elseif source == request.buttons[2] or source == request.rbuttons[1] then
 				if not searchingVideo then
 					addEventHandler("onClientRender", root, renderRequestBrowser)	
@@ -126,7 +137,7 @@ addEventHandler("onClientGUIClick", root,
 					removeEventHandler("onClientClick", root, onClick)
 					removeEventHandler("onClientCharacter", root, onCharacter)
 					removeEventHandler("onClientKey", root, onKey)
-					
+
 					unbindKey("mouse_wheel_up", "down", onScroll)
 					unbindKey("mouse_wheel_down", "down", onScroll)
 

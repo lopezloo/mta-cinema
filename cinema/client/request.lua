@@ -112,7 +112,7 @@ addEventHandler("onClientGUIClick", root,
 					end
 				end
 			elseif source == request.buttons[2] or source == request.rbuttons[1] then
-				if not searchingVideo then
+				if not request.searchingVideo then
 					addEventHandler("onClientRender", root, renderRequestBrowser)	
 					addEventHandler("onClientCursorMove", root, onCursorMove)
 					addEventHandler("onClientClick", root, onClick)
@@ -144,7 +144,7 @@ addEventHandler("onClientGUIClick", root,
 					loadBrowserURL(request.browser, "http://redknife.net/mta/cinema/request.html")
 					toggleAllControls(true, false, true)
 				end
-				searchingVideo = not searchingVideo
+				request.searchingVideo = not request.searchingVideo
 			elseif source == request.rbuttons[2] then
 				toggleFullscreen()
 			elseif source == request.rbuttons[3] and getElementData(source, "votedToSkip") == false then

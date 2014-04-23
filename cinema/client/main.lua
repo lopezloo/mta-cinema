@@ -1,17 +1,18 @@
 addEventHandler("onClientPlayerSpawn", root,
 	function()
-		for k, v in pairs(getElementsByType("player")) do
-			setElementCollidableWith(source, v, false)
-		end
-
 		if source == localPlayer then
 			setElementFrozen(source, true)
 			setTimer(setElementFrozen, 2000, 1, source, false)
+			for k, v in pairs(getElementsByType("player")) do
+				setElementCollidableWith(source, v, false)
+			end			
 
 			local room = getElementData(source, "colshape")
 			if isElement(room) then
 				triggerEvent("onClientElementColShapeHit", source, room, true)
 			end
+		else
+			setElementCollidableWith(localPlayer, source, false)
 		end
 	end
 )

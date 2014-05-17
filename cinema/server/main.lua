@@ -31,7 +31,6 @@ addEventHandler("onPlayerJoin", root,
 	function()
 		outputChatBox("Hi. Please wait for spawn.", source)
 		setTimer(spawn, 5000, 1, source)
-		bindKey(source, "K", "down", "kill")
 		bindKey(source, "R", "down", "chatbox", "Room")
 	end
 )
@@ -80,4 +79,15 @@ function spawn(player)
 end
 
 addCommandHandler("kill", function(player) if not isPedDead(player) then killPed(player) end end)
-addCommandHandler("skin", function(player) if not isPedDead(player) then setElementModel(player, skins[math.random(1, #skins)]) end end)
+addCommandHandler("skin",
+	function(player)
+		if not isPedDead(player) then
+			setElementModel(player, skins[math.random(1, #skins)])
+			--[[local a = getElementData(player, "anim")
+			if a ~= false then
+				outputChatBox("dd")
+				setTimer(setPedAnimation, 250, 1, player, a[1], a[2], 50, true, false, false, true)
+			end]]--
+		end
+	end
+)

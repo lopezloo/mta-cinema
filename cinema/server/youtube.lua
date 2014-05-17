@@ -3,6 +3,9 @@ function addVideoToQuery(room, theType, vid)
 		fetchRemote("http://gdata.youtube.com/feeds/api/videos/" .. vid .. "?v=1", onVideoDataReturned, "", false, theType, room, vid) -- ?v=2
 	elseif theType == "vimeo" then
 		fetchRemote("http://vimeo.com/api/v2/video/" .. vid .. ".xml", onVideoDataReturned, "", false, theType, room, vid)	
+	elseif theType == "dailymotion" then
+		fetchRemote("https://api.dailymotion.com/video/" .. vid .. "?fields=title,duration", onVideoDataReturned, "", false, theType, room, vid)
+		-- wtf, no https support? dailymotion api works only with https
 	elseif theType == "twitch" then
 		fetchRemote("http://api.justin.tv/api/stream/list.json?channel=" .. vid, onVideoDataReturned, "", false, theType, room, vid)
 	end
@@ -16,7 +19,7 @@ function onVideoDataReturned(data, errno, theType, room, vid)
 			title = string.sub(data, a, string.find(data, "</title>", a) - 1)
 			outputServerLog("YT-Title: " .. title)
 
-			local a = string.find(data, "<yt:duration seconds='") + string.len("<yt:duration seconds='")
+			a = string.find(data, "<yt:duration seconds='") + string.len("<yt:duration seconds='")
 			seconds = tonumber(string.sub(data, a, string.find(data, "'/>", a) - 1))
 			outputServerLog("YT-Seconds: " .. seconds)
 
@@ -25,10 +28,18 @@ function onVideoDataReturned(data, errno, theType, room, vid)
 			local a = string.find(data, "<title>") + string.len("<title>")
 			title = string.sub(data, a, string.find(data, "</title>", a) - 1)
 
-			local a = string.find(data, "<duration>") + string.len("<duration>")
+			a = string.find(data, "<duration>") + string.len("<duration>")
 			seconds = tonumber(string.sub(data, a, string.find(data, "</duration>") - 1))
 			outputServerLog("Vimeo-Title: " .. title)
 			outputServerLog("Vimeo-Seconds: " .. seconds)
+		elseif theType == "dailymotion" then
+			local a = string.find(data, '"title":"') + string.len('"title":"')
+			title = string.sub(data, a, string.find(data, ',"', a) - 1)
+
+			a = string.find(data, a, string.find(data, '"duration":') - 1)
+			seconds = tonumber(string.sub(data, a, string.find(data, ',"')))
+			outputServerLog("Dailymotion-Title: " .. title)
+			outputServerLog("Dailymotion-Seconds: " .. seconds)
 		elseif theType == "twitch" then
 			if data == "[]" then
 				return -- channel offline
@@ -56,6 +67,6 @@ function onVideoDataReturned(data, errno, theType, room, vid)
 			triggerClientEvent("updateQuery", v, vid, title, seconds)
 		end	
 	else
-		outputServerLog("ERROR: I can't retrieve data about video from server.")
+		outputServerLog("ERROR: I can't retrieve data about video from server (error " .. errno .. ")")
 	end
 end

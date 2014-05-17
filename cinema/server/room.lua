@@ -49,7 +49,7 @@ addEvent("requestVideo", true)
 addEventHandler("requestVideo", root,
 	function(theType, id)
 		local colshape = getElementData(client, "colshape")
-		outputChatBox("requestVideo for room " .. tostring(colshape))
+		outputChatBox("requestVideo for room " .. tostring(colshape) .. " (video " .. tostring(id) .. ")")
 		if isElement(colshape) then
 			addVideoToQuery(colshape, theType, id)
 		end
@@ -127,7 +127,7 @@ function updateRoomTime(room)
 end
 
 -- debug
-addCommandHandler("querylist", 
+--[[addCommandHandler("querylist", 
 	function(player)
 		local col = getElementData(player, "colshape")
 		if isElement(col) then
@@ -146,4 +146,4 @@ addCommandHandler("querylist",
 			end
 		end
 	end
-)
+)]]--

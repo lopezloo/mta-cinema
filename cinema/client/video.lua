@@ -6,7 +6,7 @@ local video = {
 	fullscreen
 }
 
-requiredSites = { "youtube.com", "vimeo.com", "player.vimeo.com", "twitch.tv", "redknife.net" }
+requiredSites = { "youtube.com", "vimeo.com", "player.vimeo.com", "dailymotion.com", "twitch.tv" }
 requestBrowserPages(requiredSites)
 
 local screenTextures = {
@@ -44,13 +44,29 @@ function playVideo(room, seconds)
 				outputChatBox("Passed seconds: " .. seconds)
 				url = url .. "&#t=0m" .. seconds .. "s"
 			end
+		elseif vid[1] == "dailymotion" then
+			url = "http://dailymotion.com/embed/video/" .. vid[2] .. "?autoplay=1&html=1&info=0&related=0&quality=480"
+			if seconds then
+				outputChatBox("Passed seconds: " .. seconds)
+				url = url .. "&start=" .. seconds
+			end
+			--xtxqqo_jeff-johnny-odcinek-1_videogames
+		elseif vid[1] == "soundcloud" then
+			--url = "http://w.soundcloud.com/player/?url=http://api.soundcloud.com/tracks/" .. vid[2] .. "&auto_play=true&hide_related=true&visual=true&show_comments=false&buying=false&liking=false&download=false&sharing=false"
+			--url = "http://w.soundcloud.com/player/?url=http://api.soundcloud.com/tracks/146340923&auto_play=true&visual=true"
+			--  no time parameter :(
+			url = "http://soundcloud.com/" .. vid[2] -- time parameter but no autoplay .. wtf
+			if seconds then
+				outputChatBox("Passed seconds: " .. seconds)
+				url = url .. "#t=" .. seconds .. "s"
+			end
 		elseif vid[1] == "twitch" then
 			url = "http://twitch.tv/" .. vid[2] .. "/popout"
 			--url = "http://twitch.tv/" .. vid[2] .. "/hls"
 		end
 	else
 		outputChatBox("no video in this room bro")
-		url = "http://redknife.net/mta/cinema/novideo.html"
+		url = "html/novideo.html"
 	end
 	
 	if not isElement(video.browser) then

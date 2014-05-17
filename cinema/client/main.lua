@@ -1,3 +1,4 @@
+--showCursor(true) -- there should be something like: if not allowedToViewSites then (while script was reset permissions was not resetting)
 addEventHandler("onClientPlayerSpawn", root,
 	function()
 		if source == localPlayer then
@@ -99,6 +100,7 @@ addEventHandler("onClientWebsiteRequestResult", root,
 		if not allowed then
 			outputChatBox("ERROR: #F2F2F2Allow to view this sites is required for watching videos. Say #83D68C/permissions #F2F2F2 to re-open permissions box.", 255, 0, 0, true)
 		end
+		showCursor(false)
 	end
 )
 

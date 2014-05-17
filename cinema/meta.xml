@@ -12,10 +12,18 @@
 	<script src="client/query.lua" type="client" />
 	<script src="client/main.lua" type="client" />
 
+	<file src="html/novideo.html" />
+	<file src="html/request.html" />
+	<file src="html/logo.png" />
+	<file src="html/logosmall.png" />
+
 	<file src="replaceTexture.fx" />
-	<!-- <file src="html/novideo.html" /> -->
 
 	<export function="createRoom" type="server" />
 	<include resource="cinema-anims" />
 	<!-- <include resource="cinema-names" /> -->
+
+	<aclrequest>
+		<right name="function.fetchRemote" access="true" />
+    </aclrequest>
 </meta>

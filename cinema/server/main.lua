@@ -1,5 +1,6 @@
+-- PURPOSE: Main/misc stuff.
+
 local skins = getValidPedModels()
-setFPSLimit(100) -- test
 
 addEventHandler("onGamemodeMapStart", root,
 	function(map)

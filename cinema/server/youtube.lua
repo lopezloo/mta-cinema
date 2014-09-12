@@ -1,3 +1,5 @@
+-- PURPOSE: Contacting with video services API and getting info about videos.
+
 function addVideoToQuery(room, theType, vid)
 	if theType == "yt" then
 		fetchRemote("http://gdata.youtube.com/feeds/api/videos/" .. vid .. "?v=1", onVideoDataReturned, "", false, theType, room, vid) -- ?v=2
@@ -55,8 +57,8 @@ function onVideoDataReturned(data, errno, theType, room, vid)
 			outputChatBox("requestVideo list is currently empty")
 
 			roomCurrentVideo[room] = {theType, vid, title, seconds}
-			setElementData(room, "video", {theType, vid}) -- trigger to clients
-			setElementData(room, "seconds", 0)
+			setElementData(room, "video", {theType, vid}) -- data which store only current video data
+			setElementData(room, "seconds", 0) -- too
 			if type(seconds) == "number" and seconds > 0 then
 				roomUpdateTimer[room] = setTimer(updateRoomTime, 1000, seconds, room)
 			end
@@ -67,6 +69,6 @@ function onVideoDataReturned(data, errno, theType, room, vid)
 			triggerClientEvent("updateQuery", v, vid, title, seconds)
 		end	
 	else
-		outputServerLog("ERROR: I can't retrieve data about video from server (error " .. errno .. ")")
+		outputServerLog("ERROR: I can't retrieve data about video from " .. theType .. " API (error " .. errno .. ")")
 	end
 end

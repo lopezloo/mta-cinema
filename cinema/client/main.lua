@@ -1,3 +1,6 @@
+-- PURPOSE: Main/misc stuff.
+
+sX, sY = guiGetScreenSize()
 --showCursor(true) -- there should be something like: if not allowedToViewSites then (while script was reset permissions was not resetting)
 addEventHandler("onClientPlayerSpawn", root,
 	function()
@@ -19,7 +22,6 @@ addEventHandler("onClientPlayerSpawn", root,
 )
 
 addEventHandler("onClientPlayerDamage", root, cancelEvent)
-addEventHandler("onClientPlayerWasted", localPlayer, stopVideo)
 
 -- rooms
 addEventHandler("onClientElementColShapeHit", root,
@@ -95,14 +97,11 @@ bindKey("l", "down",
 	end
 )
 
-addEventHandler("onClientWebsiteRequestResult", root,
-	function(allowed)
-		if not allowed then
-			outputChatBox("ERROR: #F2F2F2Allow to view this sites is required for watching videos. Say #83D68C/permissions #F2F2F2 to re-open permissions box.", 255, 0, 0, true)
-		end
-		showCursor(false)
-	end
-)
+local requiredSites = { "vimeo.com", "twitch.tv", "redknife.tk",
+"i.ytimg.com", "i1.ytimg.com", "yt3.ggpht.com", "csi.gstatic.com", "ssl.gstatic.com", "plus.googleapis.com", -- yt video images etc.
+"gp1.googleusercontent.com", "gp2.googleusercontent.com", "gp3.googleusercontent.com", "gp4.googleusercontent.com", "gp5.googleusercontent.com", "gp6.googleusercontent.com" -- g+ avatars
+}
+requestBrowserPages(requiredSites)
 
 addCommandHandler("permissions",
 	function()

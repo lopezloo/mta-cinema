@@ -7,10 +7,10 @@
 	<script src="server/youtube.lua" />
 	<script src="server/room.lua" />
 
+	<script src="client/main.lua" type="client" />
 	<script src="client/video.lua" type="client" />
 	<script src="client/request.lua" type="client" />
 	<script src="client/query.lua" type="client" />
-	<script src="client/main.lua" type="client" />
 
 	<file src="html/novideo.html" />
 	<file src="html/request.html" />

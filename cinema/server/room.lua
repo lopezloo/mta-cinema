@@ -1,3 +1,5 @@
+-- PURPOSE: Managing rooms and requesting videos.
+
 roomQuery = {}
 roomCurrentVideo = {}
 roomUpdateTimer = {}

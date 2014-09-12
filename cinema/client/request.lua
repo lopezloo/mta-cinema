@@ -1,9 +1,11 @@
+-- PURPOSE: Managing request browser, requesting videos.
+
 guiSetInputMode("no_binds_when_editing")
 request = {
 	pX = (sX-1024)/2, pY = (sY-768)/2,
 
 	window = guiCreateWindow(0.02, 0.25, 0.22, 0.60, "Requests", true),
-	browser = createBrowser(1024, 768),
+	browser = createBrowser(1024, 768, false, false), -- external request browser
 	searchingVideo
 }
 
@@ -39,12 +41,12 @@ guiSetVisible(request.window, false)
 guiSetEnabled(request.rbuttons[4], false)
 guiSetEnabled(request.rbuttons[5], false)
 
-loadBrowserURL(request.browser, "html/request.html")
+loadBrowserURL(request.browser, "http://redknife.tk/mta/cinema/request.html")
 
 addCommandHandler("req", -- debug cmd
 	function(cmd, theType, vid)
-		if (theType == "yt" or theType == "vimeo" or theType == "twitch") and vid and getElementData(localPlayer, "colshape") then -- theType == "dailymotion"
-			outputChatBox("Requesting " .. theType .. " video with url: " .. vid)
+		if (theType == "yt" or theType == "vimeo" or theType == "twitch") and vid and getElementData(localPlayer, "colshape") then
+			outputChatBox("Requesting " .. theType .. " video with url: " .. tostring(vid))
 			triggerServerEvent("requestVideo", root, theType, vid)
 		end
 	end
@@ -63,9 +65,9 @@ end
 function onClick(button, state)
 	if button == "left" then
 		if state == "down" then
-			injectBrowserMouseDown(request.browser, 0)
+			injectBrowserMouseDown(request.browser,"left")
 		else
-			injectBrowserMouseUp(request.browser, 0)
+			injectBrowserMouseUp(request.browser, "left")
 		end
 	end
 end
@@ -90,7 +92,7 @@ end
 
 local videoGetString = {
 	-- mode, url, missing letters
-	{"yt", "youtube.com/watch?", 2},
+	{"yt", "youtube.com/watch?", 2}, -- videos from playlists doesn't work
 	{"vimeo", "vimeo.com/"},
 	{"twitch", "twitch.tv/"}
 	--{"dailymotion", "dailymotion.com/video/"} -- fetchRemote doesn't support HTTPS motherfuckers
@@ -112,7 +114,7 @@ addEventHandler("onClientGUIClick", root,
 						break
 					end
 				end
-			elseif source == request.buttons[2] or source == request.rbuttons[1] then -- Cancel request or start request button
+			elseif source == request.buttons[2] or source == request.rbuttons[1] then -- cancel request or start request button
 				if not request.searchingVideo then
 					guiSetVisible(request.window, false)
 
@@ -147,7 +149,7 @@ addEventHandler("onClientGUIClick", root,
 				end
 				request.searchingVideo = not request.searchingVideo
 			elseif source == request.buttons[3] then
-				loadBrowserURL(request.browser, "html/request.html")
+				loadBrowserURL(request.browser, "http://redknife.tk/mta/cinema/request.html")
 			elseif source == request.rbuttons[2] then
 				toggleFullscreen()
 			elseif source == request.rbuttons[3] and getElementData(source, "votedToSkip") == false then
@@ -173,10 +175,7 @@ addEventHandler("onClientMouseLeave", root,
 	end
 )
 
--- TODO: play yt videos in HTML5 mode in request browser (&html5 param doesn't work, YT propably auto play in HTML5 if flash for other browser was not detected)
---																								^ lol, no
-
-addCommandHandler("menu",
+addCommandHandler("menu", -- request menu/gui
 	function()
 		if isElement(getElementData(localPlayer, "colshape")) then
 			local a = guiGetVisible(request.window)

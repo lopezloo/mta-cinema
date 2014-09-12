@@ -1,13 +1,10 @@
-sX, sY = guiGetScreenSize()
+-- PURPOSE: Playing videos on cinema room screens.
 
 local video = {
 	shader = dxCreateShader("replaceTexture.fx"),
 	browser,
 	fullscreen
 }
-
-requiredSites = { "youtube.com", "vimeo.com", "player.vimeo.com", "dailymotion.com", "twitch.tv" }
-requestBrowserPages(requiredSites)
 
 local screenTextures = {
 	[7901] = "bobobillboard1",
@@ -22,15 +19,12 @@ if not video.shader then
 end
 
 function playVideo(room, seconds)
-	local vid = getElementData(room, "video")
-
-	local screens = getElementData(room, "screens")
+	local vid, screens, url = getElementData(room, "video"), getElementData(room, "screens")
 	if not screens then
 		outputChatBox("ERROR: Room doesn't have assigned any screen.")
 		return
 	end
 
-	local url
 	if vid then
 		if vid[1] == "yt" then
 			url = "http://youtube.com/tv/#/watch?v=" .. vid[2] .. "&mode=transport"
@@ -50,7 +44,6 @@ function playVideo(room, seconds)
 				outputChatBox("Passed seconds: " .. seconds)
 				url = url .. "&start=" .. seconds
 			end
-			--xtxqqo_jeff-johnny-odcinek-1_videogames
 		elseif vid[1] == "soundcloud" then
 			--url = "http://w.soundcloud.com/player/?url=http://api.soundcloud.com/tracks/" .. vid[2] .. "&auto_play=true&hide_related=true&visual=true&show_comments=false&buying=false&liking=false&download=false&sharing=false"
 			--url = "http://w.soundcloud.com/player/?url=http://api.soundcloud.com/tracks/146340923&auto_play=true&visual=true"
@@ -62,23 +55,27 @@ function playVideo(room, seconds)
 			end
 		elseif vid[1] == "twitch" then
 			url = "http://twitch.tv/" .. vid[2] .. "/popout"
-			--url = "http://twitch.tv/" .. vid[2] .. "/hls"
 		end
 	else
-		outputChatBox("no video in this room bro")
-		url = "html/novideo.html"
+		url = "http://redknife.tk/mta/cinema/novideo.html"
 	end
 	
 	if not isElement(video.browser) then
-		video.browser = createBrowser(sX, sY)
+		video.browser = createBrowser(sX, sY, false)
 		addEventHandler("onClientRender", root, updateVideoBrowser)
 	end
+
+	outputDebugString("Trying to load url: " .. url)
+	--[[if isBrowserURLBlocked(url) then -- and url ~= "html/novideo.html" -- bugged in 
+		outputChatBox("You don't allowed to view this site, please use /permissions (" .. url .. ")")
+	else
+		loadBrowserURL(video.browser, url)
+	end]]--
 	loadBrowserURL(video.browser, url)
-	outputChatBox("Loading URL: " .. url)
 
 	dxSetShaderValue(video.shader, "Tex0", video.browser)
 	for k, v in pairs(screens) do
-		outputChatBox(tostring(getElementModel(v)) .. " = " .. tostring(screenTextures[getElementModel(v)]))
+		--outputChatBox(tostring(getElementModel(v)) .. " = " .. tostring(screenTextures[getElementModel(v)]))
 		engineApplyShaderToWorldTexture(video.shader, screenTextures[getElementModel(v)], v) -- bobobillboard1 , cj_tv_screen , drvin_screen
 	end
 end
@@ -104,6 +101,7 @@ function stopVideo(room)
 		end		
 	end
 end
+addEventHandler("onClientPlayerWasted", localPlayer, stopVideo)
 
 function updateVideoBrowser()
 	updateBrowser(video.browser)
@@ -124,9 +122,10 @@ function toggleFullscreen()
 	end
 end
 
-bindKey("O", "down", -- show controls, not always work with vimeo (?)
+bindKey("O", "down", -- show video controls
 	function()
-		if isElement(video.browser) then
+		if isElement(video.browser) and not request.searchingVideo then
+			injectBrowserMouseMove(video.browser, 1, 1)
 			injectBrowserMouseMove(video.browser, 0, 0)
 		end
 	end

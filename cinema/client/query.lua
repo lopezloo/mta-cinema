@@ -1,3 +1,5 @@
+-- PURPOSE: Updating and listing current room video query.
+
 currentRoomQuery = {}
 
 local function secondsToTime(seconds)

@@ -92,7 +92,7 @@ end
 
 local videoGetString = {
 	-- mode, url, missing letters
-	{"yt", "youtube.com/watch?", 2}, -- videos from playlists doesn't work
+	{"yt", "youtube.com/watch?", 2},
 	{"vimeo", "vimeo.com/"},
 	{"twitch", "twitch.tv/"}
 	--{"dailymotion", "dailymotion.com/video/"} -- fetchRemote doesn't support HTTPS motherfuckers
@@ -106,9 +106,16 @@ addEventHandler("onClientGUIClick", root,
 				outputChatBox("Request url: " .. tostring(url))
 				for k, v in pairs(videoGetString) do
 					local a = string.find(url, v[2])
-					if a then
-						if v[3] then a = a + v[3] end
+					if a then -- if video service url pattern found
+						if v[3] then 
+							a = a + v[3]
+						end
+
 						url = string.sub(url, a + string.len(v[2]))
+						local urlEnd = string.find(url, "&")
+						if urlEnd then
+							url = string.sub(url, 1, urlEnd - 1)
+						end
 						outputChatBox("Requesting video (" .. v[1] .. ") with url: " .. url)
 						triggerServerEvent("requestVideo", root, v[1], url)
 						break

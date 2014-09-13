@@ -97,9 +97,10 @@ bindKey("l", "down",
 	end
 )
 
-local requiredSites = { "vimeo.com", "twitch.tv", "redknife.tk",
+local requiredSites = { "vimeo.com", "twitch.tv", "www.twitch.tv", "redknife.tk",
 "i.ytimg.com", "i1.ytimg.com", "yt3.ggpht.com", "csi.gstatic.com", "ssl.gstatic.com", "plus.googleapis.com", -- yt video images etc.
-"gp1.googleusercontent.com", "gp2.googleusercontent.com", "gp3.googleusercontent.com", "gp4.googleusercontent.com", "gp5.googleusercontent.com", "gp6.googleusercontent.com" -- g+ avatars
+"gp1.googleusercontent.com", "gp2.googleusercontent.com", "gp3.googleusercontent.com", "gp4.googleusercontent.com", "gp5.googleusercontent.com", "gp6.googleusercontent.com", -- g+ avatars
+"api.twitch.tv", "spade.twitch.tv", "static-cdn.jtvnw.net", "www-cdn.jtvnw.net", "s.jtvnw.net", "ttv-15.firebaseio.com" -- twitch stuff
 }
 requestBrowserPages(requiredSites)
 

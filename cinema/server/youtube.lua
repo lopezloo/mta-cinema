@@ -7,9 +7,11 @@ function addVideoToQuery(room, theType, vid)
 		fetchRemote("http://vimeo.com/api/v2/video/" .. vid .. ".xml", onVideoDataReturned, "", false, theType, room, vid)	
 	elseif theType == "dailymotion" then
 		fetchRemote("https://api.dailymotion.com/video/" .. vid .. "?fields=title,duration", onVideoDataReturned, "", false, theType, room, vid)
-		-- wtf, no https support? dailymotion api works only with https
+		-- Dailymotion api works only with https
 	elseif theType == "twitch" then
-		fetchRemote("http://api.justin.tv/api/stream/list.json?channel=" .. vid, onVideoDataReturned, "", false, theType, room, vid)
+		fetchRemote("https://api.twitch.tv/kraken/streams/" .. vid, onVideoDataReturned, "", false, theType, room, vid)
+		-- Twitch is broken because now it's require SSL too. Pokerface.
+		-- Old api link: http://api.justin.tv/api/stream/list.json?channel=
 	end
 end
 
@@ -43,11 +45,11 @@ function onVideoDataReturned(data, errno, theType, room, vid)
 			outputServerLog("Dailymotion-Title: " .. title)
 			outputServerLog("Dailymotion-Seconds: " .. seconds)
 		elseif theType == "twitch" then
-			if data == "[]" then
+			if not string.find(data, '"game"') then
 				return -- channel offline
 			end
 
-			local a = string.find(data, '"title":"') + string.len('"title":"')
+			local a = string.find(data, '"status":"') + string.len('"status":"')
 			title = string.sub(data, a, string.find(data, '","', a) - 1)
 			seconds = "-"
 			outputServerLog("Twitch title: " .. tostring(title))

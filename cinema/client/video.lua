@@ -3,15 +3,15 @@
 local video = {
 	shader = dxCreateShader("replaceTexture.fx"),
 	browser,
-	fullscreen
-}
+	fullscreen,
 
-local screenTextures = {
-	[7901] = "bobobillboard1",
-	[2596] = "cj_tv_screen",
-	[2296] = "cj_tv_screen",
-	[16377] = "cj_tv_screen",
-	[2700] = "cj_tv_screen"
+	screenTextures = { -- should be loaded from xml?
+		[7901] = "bobobillboard1",
+		[2596] = "cj_tv_screen",
+		[2296] = "cj_tv_screen",
+		[16377] = "cj_tv_screen",
+		[2700] = "cj_tv_screen"
+	}
 }
 
 if not video.shader then
@@ -62,7 +62,6 @@ function playVideo(room, seconds)
 	
 	if not isElement(video.browser) then
 		video.browser = createBrowser(sX, sY, false)
-		addEventHandler("onClientRender", root, updateVideoBrowser)
 	end
 
 	outputDebugString("Trying to load url: " .. url)
@@ -75,8 +74,7 @@ function playVideo(room, seconds)
 
 	dxSetShaderValue(video.shader, "Tex0", video.browser)
 	for k, v in pairs(screens) do
-		--outputChatBox(tostring(getElementModel(v)) .. " = " .. tostring(screenTextures[getElementModel(v)]))
-		engineApplyShaderToWorldTexture(video.shader, screenTextures[getElementModel(v)], v) -- bobobillboard1 , cj_tv_screen , drvin_screen
+		engineApplyShaderToWorldTexture(video.shader, video.screenTextures[getElementModel(v)], v)
 	end
 end
 
@@ -88,7 +86,7 @@ function stopVideo(room)
 			local screens = getElementData(room, "screens")
 			if screens then
 				for k, v in pairs(screens) do
-					engineRemoveShaderFromWorldTexture(video.shader, screenTextures[getElementModel(v)], v)
+					engineRemoveShaderFromWorldTexture(video.shader, video.screenTextures[getElementModel(v)], v)
 				end
 			end
 
@@ -96,16 +94,11 @@ function stopVideo(room)
 				removeEventHandler("onClientRender", root, renderVideoOnFullscreen)
 				video.fullscreen = false
 			end
-			removeEventHandler("onClientRender", root, updateVideoBrowser)
 			destroyElement(video.browser)
 		end		
 	end
 end
 addEventHandler("onClientPlayerWasted", localPlayer, stopVideo)
-
-function updateVideoBrowser()
-	updateBrowser(video.browser)
-end
 
 function renderVideoOnFullscreen()
 	dxDrawImage(0, 0, sX, sY, video.browser)
@@ -113,10 +106,10 @@ end
 
 function toggleFullscreen()
 	if isElement(video.browser) then
-		if not video.fullscreen then
-			addEventHandler("onClientRender", root, renderVideoOnFullscreen)
-		else
+		if video.fullscreen then
 			removeEventHandler("onClientRender", root, renderVideoOnFullscreen)
+		else
+			addEventHandler("onClientRender", root, renderVideoOnFullscreen)
 		end
 		video.fullscreen = not video.fullscreen
 	end
